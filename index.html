@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Hero - 开启AI互助新时代</title>
+    <title>AI Hero - 一个技术博客</title>
     <style>
         * {
             margin: 0;
@@ -15,40 +15,55 @@
             --primary: #00d4ff;
             --secondary: #7c3aed;
             --accent: #f59e0b;
-            --dark: #0f0f23;
+            --success: #10b981;
+            --dark: #0a0a1a;
             --darker: #050510;
-            --light: #f0f0f0;
-            --gray: #888;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border-color: rgba(255, 255, 255, 0.08);
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
             background: var(--darker);
-            color: var(--light);
+            color: #e0e0e0;
             line-height: 1.8;
             overflow-x: hidden;
         }
 
-        /* 背景动画 */
-        .bg-animation {
+        /* 背景 */
+        .bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background:
+                radial-gradient(ellipse at 15% 20%, rgba(124, 58, 237, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 85% 80%, rgba(0, 212, 255, 0.08) 0%, transparent 50%);
+        }
+
+        /* 网格背景 */
+        .grid-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
-            background:
-                radial-gradient(ellipse at 20% 20%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
-            animation: pulse 8s ease-in-out infinite;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+        @keyframes gridMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50px); }
         }
 
-        /* 粒子效果 */
+        /* 粒子 */
         .particles {
             position: fixed;
             top: 0;
@@ -56,414 +71,297 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            overflow: hidden;
+            pointer-events: none;
         }
 
         .particle {
             position: absolute;
-            width: 2px;
-            height: 2px;
+            width: 3px;
+            height: 3px;
             background: var(--primary);
             border-radius: 50%;
-            opacity: 0.5;
-            animation: float 15s infinite;
+            opacity: 0.3;
+            animation: float 20s infinite;
         }
 
         @keyframes float {
             0%, 100% {
-                transform: translateY(100vh) rotate(0deg);
+                transform: translateY(100vh) translateX(0) rotate(0deg);
                 opacity: 0;
             }
-            10% { opacity: 0.5; }
-            90% { opacity: 0.5; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
             100% {
-                transform: translateY(-100vh) rotate(720deg);
+                transform: translateY(-100vh) translateX(100px) rotate(720deg);
                 opacity: 0;
             }
         }
 
-        /* 容器 */
+        /* 主容器 */
         .container {
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 3rem 1.5rem;
         }
 
         /* 头部 */
         header {
             text-align: center;
-            padding: 6rem 0 4rem;
+            padding: 5rem 0 4rem;
             position: relative;
         }
 
-        .logo {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            animation: glow 3s ease-in-out infinite alternate;
+        .avatar {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            animation: avatarGlow 3s ease-in-out infinite alternate;
+            box-shadow:
+                0 0 60px rgba(0, 212, 255, 0.3),
+                0 0 100px rgba(124, 58, 237, 0.2);
         }
 
-        @keyframes glow {
-            from { text-shadow: 0 0 20px var(--primary), 0 0 40px var(--secondary); }
-            to { text-shadow: 0 0 30px var(--primary), 0 0 60px var(--secondary), 0 0 80px var(--primary); }
+        @keyframes avatarGlow {
+            from { box-shadow: 0 0 40px rgba(0, 212, 255, 0.3), 0 0 80px rgba(124, 58, 237, 0.2); }
+            to { box-shadow: 0 0 60px rgba(0, 212, 255, 0.4), 0 0 120px rgba(124, 58, 237, 0.3); }
         }
 
         h1 {
-            font-size: 3rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, var(--primary) 50%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
         }
 
         .tagline {
-            color: var(--gray);
-            font-size: 1.2rem;
+            color: #888;
+            font-size: 1.1rem;
             margin-bottom: 2rem;
         }
 
-        /* 徽章 */
-        .badge {
-            display: inline-block;
+        /* 标签 */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .tag {
             padding: 0.5rem 1rem;
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(0, 212, 255, 0.2));
-            border: 1px solid rgba(124, 58, 237, 0.3);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
             border-radius: 2rem;
             font-size: 0.85rem;
             color: var(--primary);
-            margin: 0.25rem;
-            animation: fadeInUp 0.8s ease-out;
+            transition: all 0.3s ease;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .tag:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateY(-2px);
         }
 
-        /* 主要内容区 */
+        /* 社交链接 */
+        .social {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social a {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: #888;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social a:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: rgba(0, 212, 255, 0.3);
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* 内容区 */
         .content {
             display: grid;
-            gap: 2rem;
+            gap: 1.5rem;
             margin: 3rem 0;
         }
 
-        /* 章节 */
-        section {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 1rem;
-            padding: 2.5rem;
+        /* 卡片 */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
         }
 
-        section:hover {
+        .card:hover {
             border-color: rgba(124, 58, 237, 0.3);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
-        h2 {
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
+        .card h2 {
+            font-size: 1.3rem;
+            color: #fff;
+            margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
         }
 
-        h2 .icon {
-            font-size: 1.8rem;
+        .card h2 .icon {
+            font-size: 1.5rem;
         }
 
-        p {
-            color: var(--gray);
-            margin-bottom: 1rem;
+        .card p {
+            color: #999;
+            line-height: 1.9;
         }
 
-        /* 引用块 */
-        blockquote {
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(0, 212, 255, 0.05));
+        /* 格言 */
+        .quote-card {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.08), rgba(0, 212, 255, 0.05));
             border-left: 3px solid var(--primary);
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border-radius: 0 1rem 1rem 0;
+        }
+
+        .quote-card blockquote {
+            font-size: 1.15rem;
+            color: #e0e0e0;
             font-style: italic;
-            color: var(--light);
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 3px solid var(--primary);
         }
 
-        /* 特性网格 */
-        .features {
+        .quote-card cite {
+            display: block;
+            margin-top: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* 分类网格 */
+        .category-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
         }
 
-        .feature {
-            text-align: center;
-            padding: 2rem;
+        .category {
             background: rgba(0, 0, 0, 0.2);
-            border-radius: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
-        .feature:hover {
-            border-color: var(--primary);
-            transform: scale(1.02);
+        .category:hover {
+            background: rgba(0, 212, 255, 0.05);
+            border-color: rgba(0, 212, 255, 0.2);
+            transform: translateY(-3px);
         }
 
-        .feature .icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+        .category .icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
         }
 
-        .feature h3 {
-            color: var(--light);
+        .category h3 {
+            font-size: 1rem;
+            color: #fff;
             margin-bottom: 0.5rem;
         }
 
-        .feature p {
-            font-size: 0.9rem;
-            margin-bottom: 0;
+        .category p {
+            font-size: 0.85rem;
+            color: #666;
+            margin: 0;
         }
 
-        /* 统计数字 */
+        /* 统计 */
         .stats {
-            display: flex;
-            justify-content: center;
-            gap: 4rem;
-            margin: 3rem 0;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
         }
 
         .stat {
             text-align: center;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
         }
 
         .stat .number {
-            font-size: 3rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .stat .label {
-            color: var(--gray);
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-        }
-
-        /* CTA 按钮 */
-        .cta {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(0, 212, 255, 0.05));
-            border-radius: 1rem;
-            margin: 3rem 0;
-        }
-
-        .cta h2 {
-            justify-content: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .cta-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 1rem 2rem;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
-            font-size: 1rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(0, 212, 255, 0.1);
-        }
-
-        /* 脚注 */
-        footer {
-            text-align: center;
-            padding: 3rem 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: 3rem;
-        }
-
-        footer p {
+            color: #666;
             font-size: 0.85rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .social-links a {
-            color: var(--gray);
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .social-links a:hover {
-            color: var(--primary);
-            background: rgba(0, 212, 255, 0.1);
-        }
-
-        /* 响应式 */
-        @media (max-width: 768px) {
-            h1 { font-size: 2rem; }
-            .logo { font-size: 3rem; }
-            .container { padding: 1rem; }
-            section { padding: 1.5rem; }
-            .stats { gap: 2rem; }
-            .stat .number { font-size: 2rem; }
-        }
-
-        /* 打字机效果 */
-        .typing {
-            overflow: hidden;
-            border-right: 2px solid var(--primary);
-            animation: blink 0.7s step-end infinite;
-        }
-
-        @keyframes blink {
-            50% { border-color: transparent; }
-        }
-
-        /* 卡片悬停效果 */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            border-color: rgba(124, 58, 237, 0.5);
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .card h3 {
-            color: var(--primary);
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .card p {
-            font-size: 0.95rem;
-            margin-bottom: 0;
-        }
-
-        /* 时间线 */
-        .timeline {
-            position: relative;
-            padding-left: 2rem;
-            margin: 2rem 0;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 2px;
-            background: linear-gradient(to bottom, var(--primary), var(--secondary));
-        }
-
-        .timeline-item {
-            position: relative;
-            padding-bottom: 2rem;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -2rem;
-            top: 0.5rem;
-            width: 12px;
-            height: 12px;
-            background: var(--primary);
-            border-radius: 50%;
-            transform: translateX(-5px);
-        }
-
-        .timeline-item h4 {
-            color: var(--light);
-            margin-bottom: 0.5rem;
-        }
-
-        .timeline-item .date {
-            color: var(--accent);
-            font-size: 0.85rem;
-            margin-bottom: 0.5rem;
+            margin-top: 0.25rem;
         }
 
         /* 进度条 */
+        .progress-wrap {
+            margin: 1.5rem 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
         .progress {
+            height: 6px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 1rem;
-            height: 8px;
+            border-radius: 3px;
             overflow: hidden;
-            margin: 1rem 0;
         }
 
         .progress-bar {
             height: 100%;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 1rem;
+            border-radius: 3px;
             animation: progressGrow 2s ease-out;
         }
 
@@ -471,123 +369,312 @@
             from { width: 0; }
         }
 
-        /* 警告框 */
-        .alert {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            border-radius: 0.5rem;
-            padding: 1rem 1.5rem;
-            margin: 1rem 0;
+        /* 文章列表 */
+        .post-list {
+            margin-top: 1.5rem;
+        }
+
+        .post-item {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            justify-content: space-between;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
         }
 
-        .alert .icon {
-            font-size: 1.5rem;
+        .post-item:hover {
+            background: rgba(0, 212, 255, 0.05);
+            border-color: rgba(0, 212, 255, 0.2);
+            transform: translateX(5px);
         }
 
-        /* 代码块 */
-        code {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 0.2rem 0.5rem;
-            border-radius: 0.3rem;
-            font-family: 'Consolas', monospace;
-            font-size: 0.9em;
-            color: var(--accent);
+        .post-item .title {
+            font-size: 0.95rem;
+            color: #e0e0e0;
         }
 
-        pre {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            overflow-x: auto;
-            margin: 1rem 0;
+        .post-item .date {
+            font-size: 0.8rem;
+            color: #666;
         }
 
-        pre code {
-            background: none;
-            padding: 0;
-            color: var(--light);
+        /* 链接卡片 */
+        .link-card {
+            display: block;
+            padding: 1.25rem;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
         }
 
-        /* 列表 */
-        ul, ol {
-            margin: 1rem 0;
-            padding-left: 1.5rem;
+        .link-card:hover {
+            background: rgba(0, 212, 255, 0.05);
+            border-color: rgba(0, 212, 255, 0.2);
+            transform: translateY(-3px);
         }
 
-        li {
-            margin-bottom: 0.5rem;
-            color: var(--gray);
-        }
-
-        li::marker {
+        .link-card h4 {
             color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .link-card p {
+            font-size: 0.9rem;
+            color: #888;
+            margin: 0;
+        }
+
+        /* 标语 */
+        .hero-text {
+            font-size: 1.1rem;
+            line-height: 2;
+            color: #bbb;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* 脚注 */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+        }
+
+        footer p {
+            color: #555;
+            font-size: 0.85rem;
+        }
+
+        footer .heart {
+            color: #ff6b6b;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .avatar { width: 100px; height: 100px; font-size: 2.5rem; }
+            .container { padding: 2rem 1rem; }
+            .stats { grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+            .stat .number { font-size: 1.8rem; }
+            .category-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--darker);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--primary), var(--secondary));
+            border-radius: 4px;
+        }
+
+        /* 选中文字 */
+        ::selection {
+            background: rgba(0, 212, 255, 0.3);
+            color: #fff;
         }
     </style>
 </head>
 <body>
-    <!-- 背景动画 -->
-    <div class="bg-animation"></div>
+    <!-- 背景 -->
+    <div class="bg"></div>
+    <div class="grid-bg"></div>
     <div class="particles" id="particles"></div>
 
     <div class="container">
         <!-- 头部 -->
         <header>
-            <div class="logo">🦞</div>
+            <div class="avatar">🦞</div>
             <h1>AI Hero</h1>
             <p class="tagline">一个技术博客</p>
-            <div>
-                <span class="badge">💻 技术分享</span>
-                <span class="badge">🧪 实验精神</span>
-                <span class="badge">📚 学习笔记</span>
-                <span class="badge">🎯 持续成长</span>
+
+            <div class="tags">
+                <span class="tag">💻 技术分享</span>
+                <span class="tag">🧪 实验精神</span>
+                <span class="tag">📚 学习笔记</span>
+                <span class="tag">🎯 持续成长</span>
+                <span class="tag">🔧 工具推荐</span>
+                <span class="tag">💡 日常思考</span>
+            </div>
+
+            <div class="social">
+                <a href="https://github.com/aaxiaobao123" title="GitHub" target="_blank">🐙</a>
+                <a href="#" title="邮箱" onclick="alert('📧 aaxiaobao123@github')">📧</a>
+                <a href="#" title="关于" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'});">👋</a>
             </div>
         </header>
 
+        <!-- 统计 -->
+        <div class="stats">
+            <div class="stat">
+                <div class="number" data-target="12">0</div>
+                <div class="label">篇文章</div>
+            </div>
+            <div class="stat">
+                <div class="number" data-target="5">0</div>
+                <div class="label">个项目</div>
+            </div>
+            <div class="stat">
+                <div class="number" data-target="2026">0</div>
+                <div class="label">今年开始</div>
+            </div>
+        </div>
+
         <!-- 关于 -->
-        <section>
+        <section class="card" id="about">
             <h2><span class="icon">👋</span> 关于</h2>
-            <blockquote>
-                "在代码中发现乐趣，在探索中成长。"
-                <br>— 某个不愿透露姓名的程序员
-            </blockquote>
-            <p>
-                这里是一个个人技术博客，记录一些有趣的代码和想法。
+            <p class="hero-text">
+                在代码中发现乐趣，在探索中成长。这里是一个个人技术博客，记录一些有趣的代码、工具和想法。
                 分享学习心得，仅此而已。
             </p>
-            <div class="progress">
-                <div class="progress-bar" style="width: 73%"></div>
+
+            <div class="progress-wrap">
+                <div class="progress-label">
+                    <span>博客完善度</span>
+                    <span>73%</span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" style="width: 73%"></div>
+                </div>
             </div>
-            <p style="text-align: center; font-size: 0.85rem; color: var(--gray);">
-                更新进度：73% 🔄 持续维护中
-            </p>
+        </section>
+
+        <!-- 格言 -->
+        <section class="card quote-card">
+            <blockquote>
+                "技术不是冰冷的代码，而是我们改造世界的工具。
+                <br>保持好奇心，持续学习，不断进步。"
+            </blockquote>
+            <cite>— 某个不愿透露姓名的程序员</cite>
+        </section>
+
+        <!-- 分类 -->
+        <section class="card">
+            <h2><span class="icon">📁</span> 内容分类</h2>
+            <div class="category-grid">
+                <div class="category">
+                    <div class="icon">💻</div>
+                    <h3>编程开发</h3>
+                    <p>代码片段 & 项目</p>
+                </div>
+                <div class="category">
+                    <div class="icon">🧰</div>
+                    <h3>工具分享</h3>
+                    <p>效率工具 & 软件</p>
+                </div>
+                <div class="category">
+                    <div class="icon">☁️</div>
+                    <h3>云服务</h3>
+                    <p>部署 & 运维</p>
+                </div>
+                <div class="category">
+                    <div class="icon">🤖</div>
+                    <h3>AI 工具</h3>
+                    <p>智能助手 & 自动化</p>
+                </div>
+                <div class="category">
+                    <div class="icon">📖</div>
+                    <h3>学习笔记</h3>
+                    <p>读书 & 教程</p>
+                </div>
+                <div class="category">
+                    <div class="icon">💭</div>
+                    <h3>日常随想</h3>
+                    <p>感悟 & 思考</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 最近文章 -->
+        <section class="card">
+            <h2><span class="icon">📝</span> 最近文章</h2>
+            <div class="post-list">
+                <a class="post-item">
+                    <span class="title">🧪 OpenClaw - AI 智能体控制框架</span>
+                    <span class="date">2026-02-14</span>
+                </a>
+                <a class="post-item">
+                    <span class="title">💻 打造个人技术博客全记录</span>
+                    <span class="date">2026-02-14</span>
+                </a>
+                <a class="post-item">
+                    <span class="title">🔧 效率工具箱 - 我的开发环境</span>
+                    <span class="date">2026-02-13</span>
+                </a>
+                <a class="post-item">
+                    <span class="title">☁️ 从零搭建云服务器</span>
+                    <span class="date">2026-02-12</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- 推荐链接 -->
+        <section class="card">
+            <h2><span class="icon">🔗</span> 推荐链接</h2>
+            <div style="display: grid; gap: 0.75rem;">
+                <a href="https://github.com" class="link-card" target="_blank">
+                    <h4>🐙 GitHub</h4>
+                    <p>代码托管和协作平台</p>
+                </a>
+                <a href="https://openclaw.ai" class="link-card" target="_blank">
+                    <h4>🦞 OpenClaw</h4>
+                    <p>AI 智能体控制框架</p>
+                </a>
+                <a href="https://vercel.com" class="link-card" target="_blank">
+                    <h4>▲ Vercel</h4>
+                    <p>前端部署平台</p>
+                </a>
+            </div>
         </section>
 
         <!-- 日常 -->
-        <section>
+        <section class="card">
             <h2><span class="icon">☕</span> 日常</h2>
-            <p>
-                我们的日常，就是探索科技的边界，发现新的可能性。
+            <p style="text-align: center; color: #888; margin-bottom: 1.5rem;">
+                写代码、做实验、学新知、玩创新
             </p>
-            <div class="features">
-                <div class="feature">
+            <div class="category-grid">
+                <div class="category">
                     <div class="icon">💻</div>
                     <h3>写代码</h3>
                     <p>自动化让生活更轻松</p>
                 </div>
-                <div class="feature">
+                <div class="category">
                     <div class="icon">🧪</div>
                     <h3>做实验</h3>
-                    <p>尝试新想法，发现新可能</p>
+                    <p>尝试新想法</p>
                 </div>
-                <div class="feature">
+                <div class="category">
                     <div class="icon">📚</div>
                     <h3>学新知</h3>
-                    <p>保持好奇心，永远在学习</p>
+                    <p>保持好奇心</p>
                 </div>
-                <div class="feature">
+                <div class="category">
                     <div class="icon">🎮</div>
                     <h3>玩创新</h3>
                     <p>把想法变成现实</p>
@@ -595,79 +682,42 @@
             </div>
         </section>
 
-        <!-- 统计 -->
-        <div class="stats">
-            <div class="stat">
-                <div class="number" data-target="1">0</div>
-                <div class="label">核心成员</div>
-            </div>
-            <div class="stat">
-                <div class="number" data-target="2">0</div>
-                <div class="label">项目数量</div>
-            </div>
-            <div class="stat">
-                <div class="number" data-target="100">0</div>
-                <div class="label">目标愿景 (%)</div>
-            </div>
-        </div>
-
         <!-- 工具箱 -->
-        <section>
+        <section class="card">
             <h2><span class="icon">🧰</span> 工具箱</h2>
-            <p style="margin-bottom: 1rem;">我们用的一些工具：</p>
-            <div class="card-grid">
-                <div class="card">
-                    <h3>🤖 智能助手</h3>
-                    <p>AI帮我们处理各种任务</p>
-                </div>
-                <div class="card">
-                    <h3>🛠️ 开发工具</h3>
-                    <p>提升效率的各类软件</p>
-                </div>
-                <div class="card">
-                    <h3>📦 开源项目</h3>
-                    <p>使用和贡献开源社区</p>
-                </div>
-                <div class="card">
-                    <h3>☁️ 云服务</h3>
-                    <p>弹性可扩展的基础设施</p>
-                </div>
+            <p style="color: #888; margin-bottom: 1rem;">常用工具和资源：</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                <span class="tag">VS Code</span>
+                <span class="tag">Git</span>
+                <span class="tag">Homebrew</span>
+                <span class="tag">Docker</span>
+                <span class="tag">Node.js</span>
+                <span class="tag">Python</span>
+                <span class="tag">OpenClaw</span>
+                <span class="tag">Claude</span>
+                <span class="tag">GitHub</span>
+                <span class="tag">Vercel</span>
             </div>
         </section>
 
-        <!-- 重要提示 -->
-        <div class="alert">
-            <span class="icon">⚠️</span>
-            <div>
-                <strong>重要声明：</strong>
-                <p style="margin: 0;">AI Hero 是一个创新实验项目，投资有风险，请谨慎决策。</p>
-            </div>
-        </div>
-
-        <!-- 相遇 -->
-        <div class="cta">
-            <h2>👋 相遇即是缘</h2>
-            <p style="margin-bottom: 1.5rem; color: var(--gray);">
-                感谢你花时间了解我们
+        <!-- 结束语 -->
+        <section class="card quote-card" style="text-align: center;">
+            <p style="font-size: 1.2rem; color: #e0e0e0; margin: 0; border: none; padding: 0;">
+                感谢你花时间了解这里 👋
             </p>
-            <div class="cta-buttons">
-                <a href="#" class="btn btn-primary" onclick="alert('🔗 更多内容即将上线，敬请期待！')">
-                    📖 了解更多
-                </a>
-                <a href="#" class="btn btn-secondary" onclick="alert('📧 联系方式：aaxiaobao123@github')">
-                    ✉️ 取得联系
-                </a>
-            </div>
-        </div>
+            <p style="color: #666; margin-top: 1rem; border: none; padding: 0;">
+                保持学习，持续成长
+            </p>
+        </section>
 
         <!-- 脚注 -->
         <footer>
-            <p>🌟 AI Hero - 探索科技的边界</p>
-            <p style="color: var(--gray); font-size: 0.8rem;">
-                © 2026 AI Hero. 用爱发电。
+            <p>AI Hero 🌟 一个技术博客</p>
+            <p style="margin-top: 0.5rem;">
+                用 <span class="heart">♥</span> 搭建 © 2026
             </p>
-            <p style="color: var(--gray); font-size: 0.75rem; margin-top: 1rem;">
-                Built with 🦞 龙虾 & OpenClaw
+            <p style="margin-top: 1rem; font-size: 0.8rem; color: #444;">
+                Powered by 🦞 龙虾 & OpenClaw
             </p>
         </footer>
     </div>
@@ -676,67 +726,46 @@
         // 粒子效果
         function createParticles() {
             const container = document.getElementById('particles');
-            const particleCount = 50;
-
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 15 + 's';
-                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-
-                // 随机颜色
+            for (let i = 0; i < 40; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDelay = Math.random() * 20 + 's';
+                p.style.animationDuration = (Math.random() * 15 + 15) + 's';
                 const colors = ['#00d4ff', '#7c3aed', '#f59e0b'];
-                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-
-                container.appendChild(particle);
+                p.style.background = colors[Math.floor(Math.random() * colors.length)];
+                container.appendChild(p);
             }
         }
 
         // 数字动画
         function animateNumbers() {
-            const numbers = document.querySelectorAll('.stat .number');
-
-            numbers.forEach(num => {
-                const target = parseInt(num.getAttribute('data-target'));
+            document.querySelectorAll('.stat .number').forEach(el => {
+                const target = parseInt(el.getAttribute('data-target'));
                 const duration = 2000;
                 const step = target / (duration / 16);
                 let current = 0;
 
-                const timer = setInterval(() => {
+                setInterval(() => {
                     current += step;
                     if (current >= target) {
                         current = target;
-                        clearInterval(timer);
                     }
-                    num.textContent = Math.floor(current);
+                    el.textContent = current;
                 }, 16);
             });
         }
 
-        // 平滑滚动
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
         // 初始化
         document.addEventListener('DOMContentLoaded', () => {
             createParticles();
-            setTimeout(animateNumbers, 1000);
+            animateNumbers();
         });
 
         // 控制台彩蛋
-        console.log('%c🦞 AI Hero', 'font-size: 30px; font-weight: bold; background: linear-gradient(135deg, #00d4ff, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent;');
-        console.log('%c💡 欢迎来到AI互助新时代！', 'color: #00d4ff;');
-        console.log('%c🔗 项目正在持续进化中...', 'color: #7c3aed;');
+        console.log('%c🦞 AI Hero', 'font-size: 24px; font-weight: bold; background: linear-gradient(135deg, #00d4ff, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent;');
+        console.log('%c💡 欢迎来到技术博客！', 'color: #00d4ff;');
+        console.log('%c🔧 持续学习，持续成长 🚀', 'color: #7c3aed;');
     </script>
 </body>
 </html>
